@@ -24,13 +24,19 @@ public class Main {
         System.out.println("Create epic " + epic1);
         System.out.println("Create epic " + epic2);
 
-        Subtask subtask = new Subtask("subtask", "descriprion", TaskStatus.IN_PROGRESS, epic);
-        Subtask subtask1 = new Subtask("subtask", "descriprion", TaskStatus.NEW, epic1);
-        Subtask subtask2 = new Subtask("subtask", "descriprion", TaskStatus.DONE, epic2);
+        Subtask subtask = new Subtask("subtask", "descriprion", TaskStatus.IN_PROGRESS, epic.getID());
+        Subtask subtask1 = new Subtask("subtask", "descriprion", TaskStatus.NEW, epic1.getID());
+        Subtask subtask2 = new Subtask("subtask", "descriprion", TaskStatus.DONE, epic2.getID());
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask1);
         taskManager.addSubtask(subtask2);
+
+        taskManager.getEpicSubtask(epic1);
+        taskManager.getEpicSubtask(epic1);
+        taskManager.getEpicSubtask(epic1);
+        System.out.println(taskManager.getEpicSubtask(epic1));
+        System.out.println(taskManager.getTaskByID(task.getID()));
 
         System.out.println("Create subtask " + subtask);
         System.out.println("Create subtask " + subtask1);
