@@ -1,42 +1,45 @@
+// Ну вроде бы все поправил)
 import java.util.ArrayList;
 import java.util.HashMap;
 
 class TaskManager {
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
+    private final HashMap<Integer, Task> tasks = new HashMap<>();
+    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final HashMap<Integer, Epic> epics = new HashMap<>();
     private int countID = 0;
 
     private int generateID() {
         return countID++;
     }
 
-    Task addTask(Task task) {
+    public Task addTask(Task task) {
         task.setID(generateID());
         tasks.put(task.getID(), task);
-        return tasks.get(task.getID());
+        return task;
     }
 
     public Epic addEpic(Epic epic) {
         epic.setID(generateID());
         epics.put(epic.getID(), epic);
-        return epics.get(epic.getID());
+        return epic;
     }
 
     public Subtask addSubtask(Subtask subtask) {
-        subtask.setID(generateID());
-        subtasks.put(subtask.getID(), subtask);
         Epic epic = epics.get(subtask.getEpicID());
         if (epic == null) {
             return null;
         }
+        subtask.setID(generateID());
+        subtasks.put(subtask.getID(), subtask);
         epic.addSubTask(subtask);
         epic.updateStatus();
-        return subtasks.get(subtask.getID());
+        return subtask;
     }
 
     public void updateTask(Task task) {
-        tasks.put(task.getID(), task);
+        if (tasks.get(task.getID()) != null){
+            tasks.put(task.getID(), task);
+        }
     }
 
     public ArrayList<Task> getAllTasks() {
@@ -73,22 +76,20 @@ class TaskManager {
     }
 
     public void deleteAllEpics() {
-        deleteAllSubtasks();
+        subtasks.clear();
         epics.clear();
     }
 
     public void deleteEpicByID(int ID) {
         Epic epic = epics.get(ID);
-        ArrayList<Subtask> epicsSubtasks = epic.getSubtasks();
-        ArrayList<Integer> subtasksID = new ArrayList<>();
-        for (Subtask subtask : epicsSubtasks) {
-            subtasksID.add(subtask.getID());
+        if(epic != null){
+            ArrayList<Subtask> epicsSubtasks = epic.getSubtasks();
+            for (Subtask subtask : epicsSubtasks) {
+                subtasks.remove(subtask.getID());
+            }
+            epic.getSubtasks().clear();
+            epics.remove(ID);
         }
-        for (Integer subtask : subtasksID) {
-            subtasks.remove(subtask);
-        }
-        epic.getSubtasks().clear();
-        epics.remove(ID);
     }
 
     public void updateSubtask(Subtask subtask) {
@@ -99,13 +100,17 @@ class TaskManager {
         if (epic == null) {
             return;
         }
-        ArrayList<Subtask> subtaskForEpic = epic.getSubtasks();
-        for (int i = 0; i < subtaskForEpic.size(); i++) {
-            if(subtaskForEpic.get(i).getID() == subtask.getID()){
-                subtaskForEpic.set(i, subtask);
-                epic.addSubTask(subtask);
-                epic.updateStatus();
+        if(subtasks.containsKey(subtask.getID())){
+            ArrayList<Subtask> subtaskForEpic = epic.getSubtasks();
+            for (int i = 0; i < subtaskForEpic.size(); i++) {
+                if (subtaskForEpic.get(i).getID() == subtask.getID()) {
+                    subtaskForEpic.set(i, subtask);
+                    epic.addSubTask(subtask);
+                    epic.updateStatus();
+                    break;
+                }
             }
+            subtasks.put(subtask.getID(), subtask);
         }
     }
 
@@ -133,12 +138,12 @@ class TaskManager {
     public void deleteSubtasksByID(int ID) {
         Subtask subtask = subtasks.remove(ID);
         Epic epic = epics.get(subtask.getEpicID());
-        if(epic == null){
+        if (epic == null) {
             return;
         }
         ArrayList<Subtask> epicsSubtasks = epic.getSubtasks();
         for (int i = 0; i < epicsSubtasks.size(); i++) {
-            if(epicsSubtasks.get(i).getID() == ID){
+            if (epicsSubtasks.get(i).getID() == ID) {
                 epicsSubtasks.remove(i);
                 break;
             }
