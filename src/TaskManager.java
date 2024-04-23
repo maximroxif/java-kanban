@@ -1,4 +1,3 @@
-// Ну вроде бы все поправил)
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -100,7 +99,7 @@ class TaskManager {
         if (epic == null) {
             return;
         }
-        if(subtasks.containsKey(subtask.getID())){
+        if(subtask.getEpicID() == subtasks.get(subtask.getID()).getEpicID()){
             ArrayList<Subtask> subtaskForEpic = epic.getSubtasks();
             for (int i = 0; i < subtaskForEpic.size(); i++) {
                 if (subtaskForEpic.get(i).getID() == subtask.getID()) {
