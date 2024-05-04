@@ -1,6 +1,8 @@
+package Model;
+
 import java.util.Objects;
 
-class Task {
+public class Task {
     private int ID;
     private String name;
     private String description;
@@ -17,6 +19,18 @@ class Task {
         this.name = name;
         this.description = description;
         this.taskStatus = taskStatus;
+    }
+
+    public Task(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Task(Task task) {
+        this.name = task.name;
+        this.description = task.description;
+        this.ID = task.ID;
+        this.taskStatus = task.taskStatus;
     }
 
     public int getID() {
