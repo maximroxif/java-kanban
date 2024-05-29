@@ -1,6 +1,6 @@
-import Manager.CreateManagers;
-import Manager.TaskManager;
-import Model.Epic;
+import manager.CreateManagers;
+import manager.TaskManager;
+import model.Epic;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

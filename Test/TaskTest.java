@@ -1,7 +1,7 @@
-import Manager.CreateManagers;
-import Manager.TaskManager;
-import Model.Task;
-import Model.TaskStatus;
+import manager.CreateManagers;
+import manager.TaskManager;
+import model.Task;
+import model.TaskStatus;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -1,9 +1,9 @@
-import Manager.InMemoryTaskManager;
-import Manager.TaskManager;
-import Model.Epic;
-import Model.Subtask;
-import Model.Task;
-import Model.TaskStatus;
+import manager.InMemoryTaskManager;
+import manager.TaskManager;
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import model.TaskStatus;
 
 public class Main {
     public static void main(String[] args) {
