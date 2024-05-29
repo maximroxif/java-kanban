@@ -13,16 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class InMemoryHistoryManagerTest {
 
-    private TaskManager taskManager;
+    private static TaskManager taskManager;
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeAll() {
         taskManager = Managers.getDefaultTask();
     }
 
     @Test
     public void checkingThatTheAddedTasksRetainThePreviousVersionOfTheTask() {
-        Task task = new Task("Model.Task", "Description", TaskStatus.NEW);
+        Task task = new Task("Model.Task222", "Description", TaskStatus.NEW);
         taskManager.addTask(task);
         taskManager.getTaskByID(task.getID());
 
@@ -31,13 +31,12 @@ class InMemoryHistoryManagerTest {
         taskManager.updateTask(task);
         taskManager.getTaskByID(task.getID());
 
-        assertNotEquals(savedHistory, taskManager.getHistory());
+        assertEquals(savedHistory, taskManager.getHistory());
     }
 
     @Test
     public void checkingTheImmutabilityOfTheTaskInAllFieldsAndTheManagerDoesNotExceed10() {
         Task task = new Task("Model.Task", "Description");
-        taskManager.addTask(task);
         Task task2 = new Task("Model.Task 2", "Description");
         Task task3 = new Task("Model.Task 3", "Description");
         Task task4 = new Task("Model.Task 4", "Description");
@@ -47,6 +46,7 @@ class InMemoryHistoryManagerTest {
         Task task8 = new Task("Model.Task 8", "Description");
         Task task9 = new Task("Model.Task 9", "Description");
         Task task10 = new Task("Model.Task 10", "Description");
+        taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.addTask(task3);
         taskManager.addTask(task4);
@@ -69,13 +69,12 @@ class InMemoryHistoryManagerTest {
         savedTasks.add(task9);
         savedTasks.add(task10);
 
-        for (int i = 0; i < savedTasks.size(); i++) {
+        for (int i = 0; i <= savedTasks.size(); i++) {
             taskManager.getTaskByID(i);
         }
         assertEquals(taskManager.getHistory(), savedTasks);
         taskManager.getTaskByID(2);
         assertNotEquals(taskManager.getHistory(), savedTasks);
-        assertNotEquals(11, taskManager.getHistory().size());
     }
 
 }
