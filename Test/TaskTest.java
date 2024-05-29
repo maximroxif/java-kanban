@@ -1,4 +1,4 @@
-import Manager.Managers;
+import Manager.CreateManagers;
 import Manager.TaskManager;
 import Model.Task;
 import Model.TaskStatus;
@@ -13,11 +13,11 @@ class TaskTest {
 
     @Test
     void shouldAddNewTask() {
-        TaskManager taskManager = Managers.getDefaultTask();
+        TaskManager taskManager = CreateManagers.getDefaultTask();
         Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
-        final int taskId = taskManager.addTask(task).getID();
+        final int taskid = taskManager.addTask(task).getid();
 
-        final Task savedTask = taskManager.getTaskByID(taskId);
+        final Task savedTask = taskManager.getTaskByid(taskid);
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
@@ -33,8 +33,8 @@ class TaskTest {
     void checkThatClassInstancesAreEqualToEachOther() {
         Task task1 = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
         Task task2 = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
-        task1.setID(0);
-        task2.setID(0);
+        task1.setid(0);
+        task2.setid(0);
         assertEquals(task1, task2);
     }
 

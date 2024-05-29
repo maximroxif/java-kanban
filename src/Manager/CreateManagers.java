@@ -1,6 +1,6 @@
 package Manager;
 
-public class managers {
+public class CreateManagers {
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }

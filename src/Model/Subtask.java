@@ -1,30 +1,30 @@
 package Model;
 
 public class Subtask extends Task {
-    private int epicID;
+    private int epicid;
 
-    public Subtask(int ID, String name, String description, TaskStatus taskStatus, int epicID) {
-        super(ID, name, description, taskStatus);
-        this.epicID = epicID;
+    public Subtask(int id, String name, String description, TaskStatus taskStatus, int epicid) {
+        super(id, name, description, taskStatus);
+        this.epicid = epicid;
     }
 
-    public Subtask(String name, String description, TaskStatus taskStatus, int epicID) {
+    public Subtask(String name, String description, TaskStatus taskStatus, int epicid) {
         super(name, description, taskStatus);
-        this.epicID = epicID;
+        this.epicid = epicid;
     }
 
-    public int getEpicID() {
-        return epicID;
+    public int getEpicid() {
+        return epicid;
     }
 
-    public void setEpicID(int epicID) {
-        this.epicID = epicID;
+    public void setEpicid(int epicid) {
+        this.epicid = epicid;
     }
 
     @Override
     public String toString() {
         return "Subtask{" +
-                "ID=" + getID() +
+                "id=" + getid() +
                 ", name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", taskStatus=" + getTaskStatus() +

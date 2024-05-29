@@ -1,4 +1,4 @@
-import Manager.Managers;
+import Manager.CreateManagers;
 import Manager.TaskManager;
 import Model.Task;
 import Model.TaskStatus;
@@ -17,19 +17,19 @@ class InMemoryHistoryManagerTest {
 
     @BeforeEach
     public void beforeAll() {
-        taskManager = Managers.getDefaultTask();
+        taskManager = CreateManagers.getDefaultTask();
     }
 
     @Test
     public void checkingThatTheAddedTasksRetainThePreviousVersionOfTheTask() {
         Task task = new Task("Model.Task222", "Description", TaskStatus.NEW);
         taskManager.addTask(task);
-        taskManager.getTaskByID(task.getID());
+        taskManager.getTaskByid(task.getid());
 
         List<Task> savedHistory = taskManager.getHistory();
         task.setTaskStatus(TaskStatus.IN_PROGRESS);
         taskManager.updateTask(task);
-        taskManager.getTaskByID(task.getID());
+        taskManager.getTaskByid(task.getid());
 
         assertEquals(savedHistory, taskManager.getHistory());
     }
@@ -70,10 +70,10 @@ class InMemoryHistoryManagerTest {
         savedTasks.add(task10);
 
         for (int i = 0; i <= savedTasks.size(); i++) {
-            taskManager.getTaskByID(i);
+            taskManager.getTaskByid(i);
         }
         assertEquals(taskManager.getHistory(), savedTasks);
-        taskManager.getTaskByID(2);
+        taskManager.getTaskByid(2);
         assertNotEquals(taskManager.getHistory(), savedTasks);
     }
 
