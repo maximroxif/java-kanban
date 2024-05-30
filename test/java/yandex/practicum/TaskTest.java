@@ -1,7 +1,9 @@
-import Manager.Managers;
-import Manager.TaskManager;
-import Model.Task;
-import Model.TaskStatus;
+package java.yandex.practicum;
+
+import manager.CreateManagers;
+import manager.TaskManager;
+import model.Task;
+import model.TaskStatus;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,11 +15,11 @@ class TaskTest {
 
     @Test
     void shouldAddNewTask() {
-        TaskManager taskManager = Managers.getDefaultTask();
+        TaskManager taskManager = CreateManagers.getDefaultTask();
         Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
-        final int taskId = taskManager.addTask(task).getID();
+        final int taskid = taskManager.addTask(task).getid();
 
-        final Task savedTask = taskManager.getTaskByID(taskId);
+        final Task savedTask = taskManager.getTaskByid(taskid);
 
         assertNotNull(savedTask, "Задача не найдена.");
         assertEquals(task, savedTask, "Задачи не совпадают.");
@@ -33,8 +35,8 @@ class TaskTest {
     void checkThatClassInstancesAreEqualToEachOther() {
         Task task1 = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
         Task task2 = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
-        task1.setID(0);
-        task2.setID(0);
+        task1.setid(0);
+        task2.setid(0);
         assertEquals(task1, task2);
     }
 

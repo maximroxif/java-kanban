@@ -1,6 +1,8 @@
-import Manager.Managers;
-import Manager.TaskManager;
-import Model.Epic;
+package java.yandex.practicum;
+
+import manager.CreateManagers;
+import manager.TaskManager;
+import model.Epic;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -12,11 +14,11 @@ class EpicTest {
 
     @Test
     public void shouldAddNewEpic() {
-        TaskManager taskManager = Managers.getDefaultTask();
+        TaskManager taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpicDescription");
-        final int epicId = taskManager.addEpic(epic).getID();
+        final int epicid = taskManager.addEpic(epic).getid();
 
-        final Epic savedEpic = taskManager.getEpicByID(epicId);
+        final Epic savedEpic = taskManager.getEpicByid(epicid);
 
         assertNotNull(savedEpic, "Задача не найдена.");
         assertEquals(epic, savedEpic, "Задачи не совпадают.");
@@ -32,8 +34,8 @@ class EpicTest {
     public void checkThatClassInstancesAreEqualToEachOther() {
         Epic epic1 = new Epic("Test addNewEpic", "Test addNewEpic description");
         Epic epic2 = new Epic("Test addNewEpic", "Test addNewEpic description");
-        epic1.setID(0);
-        epic2.setID(0);
+        epic1.setid(0);
+        epic2.setid(0);
         assertEquals(epic1, epic2);
     }
 

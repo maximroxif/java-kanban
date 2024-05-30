@@ -1,8 +1,10 @@
-import Manager.Managers;
-import Manager.TaskManager;
-import Model.Epic;
-import Model.Subtask;
-import Model.TaskStatus;
+package java.yandex.practicum;
+
+import manager.CreateManagers;
+import manager.TaskManager;
+import model.Epic;
+import model.Subtask;
+import model.TaskStatus;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,14 +17,14 @@ class SubtaskTest {
 
     @Test
     void shouldAddNewSubtask() {
-        taskManager = Managers.getDefaultTask();
+        taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewSubtask", "Test addNewSubtask description");
         taskManager.addEpic(epic);
-        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getID());
+        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getid());
 
-        final int subtaskId = taskManager.addSubtask(subtask).getID();
+        final int subtaskid = taskManager.addSubtask(subtask).getid();
 
-        final Subtask savedSubtask = taskManager.getSubTaskByID(subtaskId);
+        final Subtask savedSubtask = taskManager.getSubTaskByid(subtaskid);
 
         assertNotNull(savedSubtask, "Задача не найдена.");
         assertEquals(subtask, savedSubtask, "Задачи не совпадают.");
@@ -36,13 +38,13 @@ class SubtaskTest {
 
     @Test
     void checkThatClassInstancesAreEqualToEachOther() {
-        taskManager = Managers.getDefaultTask();
+        taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewSubtask", "Test addNewSubtask description");
         taskManager.addEpic(epic);
-        Subtask subtask1 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getID());
-        Subtask subtask2 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getID());
-        subtask1.setID(0);
-        subtask2.setID(0);
+        Subtask subtask1 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getid());
+        Subtask subtask2 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getid());
+        subtask1.setid(0);
+        subtask2.setid(0);
         assertEquals(subtask1, subtask2);
     }
 }
