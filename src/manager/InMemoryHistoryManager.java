@@ -25,10 +25,11 @@ public class InMemoryHistoryManager implements HistoryManager {
             final Node<Task> oldTail = tail;
             Node<Task> newNode = new Node<>(oldTail, task, null);
             tail = newNode;
-            if (oldTail == null)
+            if (oldTail == null) {
                 head = newNode;
-            else
+            } else {
                 oldTail.next = newNode;
+            }
             history.put(task.getid(), newNode);
         }
         size++;
@@ -51,16 +52,18 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         if (prev == null) {
             head = next;
-            if(head != null)
+            if (head != null) {
                 head.prev = null;
+            }
         } else {
             prev.next = next;
         }
 
         if (next == null) {
             tail = prev;
-            if (tail != null)
+            if (tail != null) {
                 tail.next = null;
+            }
         } else {
             next.prev = prev;
         }
