@@ -17,26 +17,21 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     private void linkLast(Task task) {
         if (head == null) {
-            Node<Task> oldHead = head;
-            Node<Task> newNode = new Node<>(null, task, oldHead);
+            Node<Task> newNode = new Node<>(null, task, null);
             head = newNode;
-            if (oldHead == null)
-                tail = newNode;
-            else
-                oldHead.prev = newNode;
-            size++;
+            tail = newNode;
             history.put(task.getid(), newNode);
         } else {
-            Node<Task> oldTail = tail;
+            final Node<Task> oldTail = tail;
             Node<Task> newNode = new Node<>(oldTail, task, null);
             tail = newNode;
             if (oldTail == null)
                 head = newNode;
             else
                 oldTail.next = newNode;
-            size++;
             history.put(task.getid(), newNode);
         }
+        size++;
     }
 
     private ArrayList<Task> getTasks() {
@@ -51,25 +46,24 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void removeNode(Node<Task> node) {
-        final Task element = node.item;
         final Node<Task> next = node.next;
         final Node<Task> prev = node.prev;
 
         if (prev == null) {
             head = next;
+            if(head != null)
+                head.prev = null;
         } else {
             prev.next = next;
-            node.prev = null;
         }
 
         if (next == null) {
             tail = prev;
+            if (tail != null)
+                tail.next = null;
         } else {
             next.prev = prev;
-            node.next = null;
         }
-
-        node.item = null;
         size--;
         if (size < 0)
             size = 0;
@@ -77,9 +71,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        if (history.get(id) == null) {
-            return;
-        } else {
+        if (history.get(id) != null) {
             removeNode(history.get(id));
             history.remove(id);
         }
