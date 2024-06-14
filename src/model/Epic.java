@@ -10,6 +10,10 @@ public class Epic extends Task {
         super(name, description, TaskStatus.NEW);
     }
 
+    public Epic(int id, String name, String description, TaskStatus taskStatus) {
+        super(id, name, description, taskStatus);
+    }
+
     public Epic(int id, String name, String description) {
         super(id, name, description, TaskStatus.NEW);
     }
@@ -21,6 +25,12 @@ public class Epic extends Task {
     public void addSubTask(Subtask subtask) {
         this.subtasks.add(subtask);
     }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.EPIC;
+    }
+
 
     public void updateStatus() {
         if (subtasks.isEmpty()) {

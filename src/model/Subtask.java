@@ -1,7 +1,7 @@
 package model;
 
 public class Subtask extends Task {
-    private int epicid;
+    private static int epicid;
 
     public Subtask(int id, String name, String description, TaskStatus taskStatus, int epicid) {
         super(id, name, description, taskStatus);
@@ -19,6 +19,15 @@ public class Subtask extends Task {
 
     public void setEpicid(int epicid) {
         this.epicid = epicid;
+    }
+
+    @Override
+    public TaskType getTaskType() {
+        return TaskType.SUBTASK;
+    }
+
+    public static int getEpicID() {
+        return epicid;
     }
 
     @Override
