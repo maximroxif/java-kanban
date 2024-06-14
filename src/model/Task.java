@@ -2,6 +2,7 @@ package model;
 
 import java.util.Objects;
 
+
 public class Task {
     private int id;
     private String name;
@@ -65,7 +66,8 @@ public class Task {
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
     }
-    public TaskType getTaskType(){
+
+    public TaskType getTaskType() {
         return TaskType.TASK;
     }
 
