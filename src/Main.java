@@ -88,10 +88,15 @@ public class Main {
         fileBackedTaskManager = fileBackedTaskManager.loadFromFile(dir);
 //        System.out.println(fileBackedTaskManager.getAllEpics());
         System.out.println();
-        System.out.println(fileBackedTaskManager.getHistory());
+//        System.out.println(fileBackedTaskManager.getHistory());
 //        taskManager1.addTask()/
         fileBackedTaskManager.addTask(new Task("Task33", "Description33"));
-
+        Epic epic2333 = new Epic("epic", "description");
+        fileBackedTaskManager.addEpic(epic2333);
+        fileBackedTaskManager.addSubtask(new Subtask("name", "descr", TaskStatus.NEW, 3));
+        fileBackedTaskManager = fileBackedTaskManager.loadFromFile(dir);
+        fileBackedTaskManager.addTask(new Task("sss", "ddd"));
+        System.out.println(fileBackedTaskManager.getEpicSubtask(epic2333));
     }
 
 }

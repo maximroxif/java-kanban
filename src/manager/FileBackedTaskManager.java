@@ -5,15 +5,14 @@ import model.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
     }
 
-
-    void save() {
+    private void save() {
         try (FileWriter fileWriter = new FileWriter(file)) {
             fileWriter.write("id,type,name,description,status,epic\n");
             if (!tasks.isEmpty()) {
@@ -72,17 +71,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 String line = reader.readLine();
                 String[] lines = line.split(",");
                 TaskType type = TaskType.valueOf(lines[1]);
+                int id = Integer.parseInt(lines[0]);
+                int count = 1;
                 if (type.equals(TaskType.TASK)) {
                     Task task = fromString(line);
-                    fileBackedTaskManager.addTask(task);
+                    fileBackedTaskManager.tasks.put(task.getid(), task);
+                    if(id > count)
+                        count = id;
                 } else if (type.equals(TaskType.EPIC)) {
                     Epic epic = (Epic) fromString(line);
-                    fileBackedTaskManager.addEpic(epic);
+                    fileBackedTaskManager.epics.put(epic.getid(), epic);
+                    if(id > count)
+                        count = id;
                 } else {
                     Subtask subtask = (Subtask) fromString(line);
-                    fileBackedTaskManager.addSubtask(subtask);
+                    fileBackedTaskManager.subtasks.put(subtask.getid(), subtask);
+                    if(id > count)
+                        count = id;
                 }
-
+                fileBackedTaskManager.countid = ++count;
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка файла");
@@ -164,6 +171,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         super.deleteAllSubtasks();
         save();
     }
-
-
 }

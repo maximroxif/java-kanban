@@ -15,9 +15,9 @@ public class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     protected  final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    private int countid = 1;
+    protected int countid = 1;
 
-    private int generateid() {
+    protected int generateid() {
         return countid++;
     }
 
