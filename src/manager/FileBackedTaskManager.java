@@ -76,18 +76,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 if (type.equals(TaskType.TASK)) {
                     Task task = fromString(line);
                     fileBackedTaskManager.tasks.put(task.getid(), task);
-                    if(id > count)
+                    if (id > count) {
                         count = id;
+                    }
                 } else if (type.equals(TaskType.EPIC)) {
                     Epic epic = (Epic) fromString(line);
                     fileBackedTaskManager.epics.put(epic.getid(), epic);
-                    if(id > count)
+                    if (id > count) {
                         count = id;
+                    }
                 } else {
                     Subtask subtask = (Subtask) fromString(line);
                     fileBackedTaskManager.subtasks.put(subtask.getid(), subtask);
-                    if(id > count)
+                    if (id > count) {
                         count = id;
+                    }
                 }
                 fileBackedTaskManager.countid = ++count;
             }
