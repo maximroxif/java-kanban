@@ -2,6 +2,7 @@ package model;
 
 import java.util.Objects;
 
+
 public class Task {
     private int id;
     private String name;
@@ -12,7 +13,7 @@ public class Task {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.taskStatus = taskStatus;
+        this.taskStatus = TaskStatus.NEW;
     }
 
     public Task(String name, String description, TaskStatus taskStatus) {
@@ -24,6 +25,7 @@ public class Task {
     public Task(String name, String description) {
         this.name = name;
         this.description = description;
+        this.taskStatus = TaskStatus.NEW;
     }
 
     public Task(Task task) {
@@ -63,6 +65,10 @@ public class Task {
 
     public void setTaskStatus(TaskStatus taskStatus) {
         this.taskStatus = taskStatus;
+    }
+
+    public TaskType getTaskType() {
+        return TaskType.TASK;
     }
 
     @Override

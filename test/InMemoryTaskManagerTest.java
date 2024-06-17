@@ -1,5 +1,3 @@
-package java.yandex.practicum;
-
 import manager.CreateManagers;
 import manager.TaskManager;
 import model.Epic;
@@ -162,7 +160,7 @@ class InMemoryTaskManagerTest {
         assertNotNull(taskManager.getSubTaskByid(subtask1.getid()));
         assertNotNull(taskManager.getSubTaskByid(subtask2.getid()));
 
-        taskManager.deleteEpicByid(0);
+        taskManager.deleteEpicByid(epic1.getid());
 
         assertNull(taskManager.getEpicByid(epic1.getid()));
         assertNull(taskManager.getSubTaskByid(subtask1.getid()));

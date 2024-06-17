@@ -1,6 +1,4 @@
-package java.yandex.practicum;
-
-import manager.CreateManagers;
+import manager.InMemoryTaskManager;
 import manager.TaskManager;
 import model.Task;
 import model.TaskStatus;
@@ -15,7 +13,7 @@ class TaskTest {
 
     @Test
     void shouldAddNewTask() {
-        TaskManager taskManager = CreateManagers.getDefaultTask();
+        TaskManager taskManager = new InMemoryTaskManager();
         Task task = new Task("Test addNewTask", "Test addNewTask description", TaskStatus.NEW);
         final int taskid = taskManager.addTask(task).getid();
 

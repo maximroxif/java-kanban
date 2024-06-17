@@ -1,5 +1,3 @@
-package java.yandex.practicum;
-
 import manager.CreateManagers;
 import manager.TaskManager;
 import model.Task;
@@ -18,7 +16,7 @@ class InMemoryHistoryManagerTest {
     private static TaskManager taskManager;
 
     @BeforeEach
-    public void beforeAll() {
+    public void beforeEach() {
         taskManager = CreateManagers.getDefaultTask();
     }
 
@@ -71,7 +69,7 @@ class InMemoryHistoryManagerTest {
         savedTasks.add(task9);
         savedTasks.add(task10);
 
-        for (int i = 0; i <= savedTasks.size(); i++) {
+        for (int i = 1; i <= savedTasks.size() + 1; i++) {
             taskManager.getTaskByid(i);
         }
         assertEquals(taskManager.getHistory(), savedTasks);

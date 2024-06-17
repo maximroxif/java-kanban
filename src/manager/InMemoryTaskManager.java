@@ -11,13 +11,13 @@ import java.util.List;
 public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager = CreateManagers.getDefaultHistory();
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected  final HashMap<Integer, Epic> epics = new HashMap<>();
 
-    private int countid = 0;
+    protected int countid = 1;
 
-    private int generateid() {
+    protected int generateid() {
         return countid++;
     }
 
