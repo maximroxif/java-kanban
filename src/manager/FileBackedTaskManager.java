@@ -88,6 +88,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 } else {
                     Subtask subtask = (Subtask) fromString(line);
                     fileBackedTaskManager.subtasks.put(subtask.getid(), subtask);
+                    Epic epic = fileBackedTaskManager.epics.get(subtask.getEpicid());
+                    epic.addSubTask(subtask);
                     if (id > count) {
                         count = id;
                     }
