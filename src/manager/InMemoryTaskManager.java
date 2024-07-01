@@ -4,16 +4,15 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
     private final HistoryManager historyManager = CreateManagers.getDefaultHistory();
     protected final HashMap<Integer, Task> tasks = new HashMap<>();
     protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    protected  final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     protected int countid = 1;
 
@@ -23,8 +22,12 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task addTask(Task task) {
+        if (intersectsWithAnExistingTask(task)) {
+            throw new IntersectsExistingTaskException("Данное время занято " + task.getName() + " " + task.getStartTime());
+        }
         task.setid(generateid());
         tasks.put(task.getid(), task);
+        updatePrioritizedTasks();
         return task;
     }
 
@@ -32,11 +35,16 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic addEpic(Epic epic) {
         epic.setid(generateid());
         epics.put(epic.getid(), epic);
+        updatePrioritizedTasks();
         return epic;
     }
 
     @Override
     public Subtask addSubtask(Subtask subtask) {
+        if (intersectsWithAnExistingTask(subtask)) {
+            throw new IntersectsExistingTaskException("Данное время занято " + subtask.getName() + " " + subtask.getStartTime());
+
+        }
         Epic epic = epics.get(subtask.getEpicid());
         if (epic == null) {
             return null;
@@ -45,14 +53,30 @@ public class InMemoryTaskManager implements TaskManager {
         subtask.setid(generateid());
         subtasks.put(subtask.getid(), subtask);
         epic.addSubTask(subtask);
+
+        if (epic.getStartTime() == null || epic.getStartTime().isAfter(subtask.getStartTime())) {
+            epic.setStartTime(subtask.getStartTime());
+        }
+
+        if (epic.getEndTime() == null || epic.getEndTime().isBefore(subtask.getEndTime())) {
+            epic.setEndTime(subtask.getEndTime());
+        }
+
+        epic.setDuration(epic.getDuration().plus(subtask.getDuration()));
+
         epic.updateStatus();
+        updatePrioritizedTasks();
         return subtask;
     }
 
     @Override
     public void updateTask(Task task) {
+        if (intersectsWithAnExistingTask(task)) {
+            throw new IntersectsExistingTaskException("Данное время занято " + task.getName() + " " + task.getStartTime());
+        }
         if (tasks.get(task.getid()) != null) {
             tasks.put(task.getid(), task);
+            updatePrioritizedTasks();
         }
     }
 
@@ -80,12 +104,14 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(task.getid());
         }
         tasks.clear();
+        updatePrioritizedTasks();
     }
 
     @Override
     public void deleteTaskByid(int id) {
         historyManager.remove(id);
         tasks.remove(id);
+        updatePrioritizedTasks();
     }
 
     @Override
@@ -96,6 +122,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         updateEpic.setName(epic.getName());
         updateEpic.setDescription(epic.getDescription());
+        updatePrioritizedTasks();
     }
 
     @Override
@@ -125,6 +152,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         subtasks.clear();
         epics.clear();
+        updatePrioritizedTasks();
     }
 
     @Override
@@ -139,11 +167,15 @@ public class InMemoryTaskManager implements TaskManager {
             epic.getSubtasks().clear();
             historyManager.remove(id);
             epics.remove(id);
+            updatePrioritizedTasks();
         }
     }
 
     @Override
     public void updateSubtask(Subtask subtask) {
+        if (intersectsWithAnExistingTask(subtask)) {
+            throw new IntersectsExistingTaskException("Данное время занято " + subtask.getName() + " " + subtask.getStartTime());
+        }
         if (subtasks.get(subtask.getid()) == null) {
             return;
         }
@@ -162,6 +194,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             subtasks.put(subtask.getid(), subtask);
+            updatePrioritizedTasks();
         }
     }
 
@@ -199,6 +232,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             epicsSubtaks.clear();
             epic.updateStatus();
+            updatePrioritizedTasks();
         }
     }
 
@@ -218,10 +252,50 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         epic.updateStatus();
+        updatePrioritizedTasks();
     }
 
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
+
+    protected void updatePrioritizedTasks() {
+        prioritizedTasks.clear();
+        for (Task task : tasks.values()) {
+            if (task.getStartTime() == null) {
+                continue;
+            }
+            prioritizedTasks.add(task);
+        }
+
+        for (Subtask subTask : subtasks.values()) {
+            if (subTask.getStartTime() == null) {
+                continue;
+            }
+            prioritizedTasks.add(subTask);
+        }
+
+        for (Epic epic : epics.values()) {
+            if (epic.getStartTime() == null) {
+                continue;
+            }
+            prioritizedTasks.add(epic);
+        }
+    }
+
+    @Override
+    public boolean intersectedTasks(Task newTask, Task task) {
+        return ((newTask.getStartTime().isBefore(task.getEndTime()))
+                && (newTask.getEndTime().isAfter(task.getStartTime())));
+    }
+
+    private boolean intersectsWithAnExistingTask(Task newTask) {
+        return prioritizedTasks.stream().anyMatch(prioritizedTask -> intersectedTasks(newTask, prioritizedTask));
     }
 }

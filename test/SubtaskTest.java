@@ -2,9 +2,11 @@ import manager.CreateManagers;
 import manager.TaskManager;
 import model.Epic;
 import model.Subtask;
-import model.TaskStatus;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +20,7 @@ class SubtaskTest {
         taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewSubtask", "Test addNewSubtask description");
         taskManager.addEpic(epic);
-        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getid());
+        Subtask subtask = new Subtask("Test addNewSubtask", "Test addNewSubtask description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10), epic.getid());
 
         final int subtaskid = taskManager.addSubtask(subtask).getid();
 
@@ -39,8 +41,8 @@ class SubtaskTest {
         taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewSubtask", "Test addNewSubtask description");
         taskManager.addEpic(epic);
-        Subtask subtask1 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getid());
-        Subtask subtask2 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", TaskStatus.NEW, epic.getid());
+        Subtask subtask1 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10), epic.getid());
+        Subtask subtask2 = new Subtask("Test addNewSubtask", "Test addNewSubtask description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10), epic.getid());
         subtask1.setid(0);
         subtask2.setid(0);
         assertEquals(subtask1, subtask2);

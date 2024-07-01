@@ -5,6 +5,9 @@ import model.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +25,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void checkingThatTheAddedTasksRetainThePreviousVersionOfTheTask() {
-        Task task = new Task("Model.Task222", "Description", TaskStatus.NEW);
+        Task task = new Task("Model.Task222", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 00), Duration.ofMinutes(0));
         taskManager.addTask(task);
         taskManager.getTaskByid(task.getid());
 
@@ -36,16 +39,16 @@ class InMemoryHistoryManagerTest {
 
     @Test
     public void checkingTheImmutabilityOfTheTaskInAllFieldsAndTheManagerDoesNotExceed10() {
-        Task task = new Task("Model.Task", "Description");
-        Task task2 = new Task("Model.Task 2", "Description");
-        Task task3 = new Task("Model.Task 3", "Description");
-        Task task4 = new Task("Model.Task 4", "Description");
-        Task task5 = new Task("Model.Task 5", "Description");
-        Task task6 = new Task("Model.Task 6", "Description");
-        Task task7 = new Task("Model.Task 7", "Description");
-        Task task8 = new Task("Model.Task 8", "Description");
-        Task task9 = new Task("Model.Task 9", "Description");
-        Task task10 = new Task("Model.Task 10", "Description");
+        Task task = new Task("Model.Task", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
+        Task task2 = new Task("Model.Task 2", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 21), Duration.ofMinutes(10));
+        Task task3 = new Task("Model.Task 3", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 32), Duration.ofMinutes(10));
+        Task task4 = new Task("Model.Task 4", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 43), Duration.ofMinutes(10));
+        Task task5 = new Task("Model.Task 5", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 54), Duration.ofMinutes(10));
+        Task task6 = new Task("Model.Task 6", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 13, 5), Duration.ofMinutes(10));
+        Task task7 = new Task("Model.Task 7", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 13, 16), Duration.ofMinutes(10));
+        Task task8 = new Task("Model.Task 8", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 13, 27), Duration.ofMinutes(10));
+        Task task9 = new Task("Model.Task 9", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 13, 38), Duration.ofMinutes(10));
+        Task task10 = new Task("Model.Task 10", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 13, 49), Duration.ofMinutes(10));
         taskManager.addTask(task);
         taskManager.addTask(task2);
         taskManager.addTask(task3);
