@@ -46,4 +46,8 @@ public interface TaskManager {
     void deleteSubtasksByid(int id);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
+
+    boolean intersectedTasks(Task newTask, Task task);
 }

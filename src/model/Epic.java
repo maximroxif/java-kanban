@@ -1,22 +1,40 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 
 public class Epic extends Task {
     private final ArrayList<Subtask> subtasks = new ArrayList<>();
+    protected LocalDateTime endTime;
 
     public Epic(String name, String description) {
-        super(name, description, TaskStatus.NEW);
+        super(name, description, null, Duration.ofMinutes(0));
     }
 
-    public Epic(int id, String name, String description, TaskStatus taskStatus) {
-        super(id, name, description, taskStatus);
+    public Epic(Epic epic) {
+        super(epic.name, epic.description, null, Duration.ofMinutes(0));
+        this.endTime = null;
+        this.id = epic.id;
     }
 
-    public Epic(int id, String name, String description) {
-        super(id, name, description, TaskStatus.NEW);
-    }
+    //    public Epic(String name, String description ) {
+//        super(name, description, TaskStatus.NEW, Duration.ofMinutes(0), null);
+//    }
+
+//    public Epic(String name, String description) {
+//        super(name, description, TaskStatus.NEW);
+//    }
+
+//    public Epic(int id, String name, String description, TaskStatus taskStatus) {
+//        super(id, name, description, taskStatus);
+//    }
+
+//    public Epic(int id, String name, String description) {
+//        super(id, name, description, TaskStatus.NEW);
+//    }
 
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
@@ -59,13 +77,32 @@ public class Epic extends Task {
         }
     }
 
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
     @Override
     public String toString() {
         return "Epic{" +
-                "id=" + getid() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", taskStatus=" + getTaskStatus() +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", taskStatus=" + taskStatus +
+                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")) +
+                ", duration=" + duration.toMinutes() +
                 '}';
     }
 }
