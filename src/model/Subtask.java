@@ -7,6 +7,9 @@ import java.time.format.DateTimeFormatter;
 public class Subtask extends Task {
     private int epicid;
 
+    public Subtask(String name, String description) {
+        super(name, description);
+    }
     public Subtask(String name, String description, LocalDateTime startTime, Duration duration, int epicid) {
         super(name, description, startTime, duration);
         this.epicid = epicid;
@@ -18,21 +21,6 @@ public class Subtask extends Task {
         this.id = subtask.id;
         this.taskStatus = subtask.taskStatus;
     }
-
-//    public Subtask(String name, String description, TaskStatus taskStatus, int epicid, Duration duration, LocalDateTime startTime) {
-//        super(name, description, taskStatus, duration, startTime);
-//        this.epicid = epicid;
-//    }
-//
-//    public Subtask(int id, String name, String description, TaskStatus taskStatus, int epicid) {
-//        super(id, name, description, taskStatus);
-//        this.epicid = epicid;
-//    }
-//
-//    public Subtask(String name, String description, TaskStatus taskStatus, int epicid) {
-//        super(name, description, taskStatus);
-//        this.epicid = epicid;
-//    }
 
     public int getEpicid() {
         return epicid;

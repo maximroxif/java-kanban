@@ -3,8 +3,12 @@ package manager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import model.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -35,7 +39,6 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic addEpic(Epic epic) {
         epic.setid(generateid());
         epics.put(epic.getid(), epic);
-        updatePrioritizedTasks();
         return epic;
     }
 
@@ -232,6 +235,9 @@ public class InMemoryTaskManager implements TaskManager {
             }
             epicsSubtaks.clear();
             epic.updateStatus();
+            epic.setStartTime(null);
+            epic.setDuration(Duration.ofMinutes(0));
+            epic.setEndTime(null);
             updatePrioritizedTasks();
         }
     }
@@ -253,6 +259,23 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epic.updateStatus();
         updatePrioritizedTasks();
+        // Наколхозил тут конечно) Но что-то не придумал как можно лучше реализовать)
+        Set<Task> subtaskTimeList = prioritizedTasks.stream().filter(subtask1 -> subtask1.getTaskType().equals(TaskType.SUBTASK)).collect(Collectors.toSet());
+        if (subtaskTimeList.isEmpty()) {
+            epic.setStartTime(null);
+            epic.setEndTime(null);
+            epic.setDuration(Duration.ofMinutes(0));
+        } else {
+            Set<Task> prioritizedSubasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+            prioritizedSubasks.addAll(subtaskTimeList);
+            epic.setStartTime(prioritizedSubasks.stream().findFirst().get().getStartTime());
+            Duration duration = Duration.ofMinutes(0);
+            for (Task taskss : prioritizedSubasks) {
+                duration = duration.plus(taskss.getDuration());
+                epic.setDuration(duration);
+            }
+            epic.setEndTime(epic.getEndTime());
+        }
     }
 
     @Override
@@ -280,13 +303,6 @@ public class InMemoryTaskManager implements TaskManager {
             }
             prioritizedTasks.add(subTask);
         }
-
-        for (Epic epic : epics.values()) {
-            if (epic.getStartTime() == null) {
-                continue;
-            }
-            prioritizedTasks.add(epic);
-        }
     }
 
     @Override
@@ -296,6 +312,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean intersectsWithAnExistingTask(Task newTask) {
-        return prioritizedTasks.stream().anyMatch(prioritizedTask -> intersectedTasks(newTask, prioritizedTask));
+        return prioritizedTasks.stream().filter(prioritizedTask -> prioritizedTask.getid() != newTask.getid()).anyMatch(prioritizedTask -> intersectedTasks(newTask, prioritizedTask));
     }
 }

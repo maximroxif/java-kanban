@@ -101,8 +101,16 @@ public class Main {
         fileBackedTaskManager.addEpic(epic2333);
         fileBackedTaskManager.addEpic(epic233);
         Subtask subtask5 = new Subtask("name", "desxr", LocalDateTime.of(2024, Month.JUNE, 30, 17, 43), Duration.ofMinutes(10), epic2333.getid());
+        Subtask subtask6 = new Subtask("name2", "desxr1", LocalDateTime.of(2024, Month.JUNE, 30, 18, 43), Duration.ofMinutes(10), epic2333.getid());
+        Subtask subtask7 = new Subtask("name23", "desxr13", LocalDateTime.of(2024, Month.JUNE, 30, 15, 43), Duration.ofMinutes(10), epic2333.getid());
 //        fileBackedTaskManager.addSubtask(new Subtask("name", "descr", TaskStatus.NEW, 3));
         fileBackedTaskManager.addSubtask(subtask5);
+        fileBackedTaskManager.addSubtask(subtask6);
+        fileBackedTaskManager.addSubtask(subtask7);
+        fileBackedTaskManager.deleteSubtasksByid(7);
+//        fileBackedTaskManager.deleteSubtasksByid(6);
+//        fileBackedTaskManager.deleteSubtasksByid(5);
+        fileBackedTaskManager.deleteAllSubtasks();
         fileBackedTaskManager = fileBackedTaskManager.loadFromFile(dir);
 //        fileBackedTaskManager.addTask(new Task("sss", "ddd"));
         System.out.println(fileBackedTaskManager.getPrioritizedTasks());

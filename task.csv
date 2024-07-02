@@ -1,6 +1,5 @@
 id,type,name,description,status,epic,startTime,duration 
 1,TASK,name,descr,NEW,,30.06.24 18:00,10
 2,TASK,name1,descr1,NEW,,30.06.24 17:10,15
-3,EPIC,epic,description,NEW,,30.06.24 17:43,10
+3,EPIC,epic,description,NEW,,,0
 4,EPIC,epic1,description1,NEW,,,0
-5,SUBTASK,name,desxr,NEW,3,30.06.24 17:43,10
