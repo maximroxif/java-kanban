@@ -4,12 +4,14 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+
 public class Subtask extends Task {
     private int epicid;
 
     public Subtask(String name, String description) {
         super(name, description);
     }
+
     public Subtask(String name, String description, LocalDateTime startTime, Duration duration, int epicid) {
         super(name, description, startTime, duration);
         this.epicid = epicid;
