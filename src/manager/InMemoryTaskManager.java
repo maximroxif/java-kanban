@@ -72,6 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setDuration(epic.getDuration().plus(subtask.getDuration()));
 
         epic.updateStatus();
+        epic.updateTime();
         updatePrioritizedTasks();
         return subtask;
     }
@@ -129,7 +130,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         updateEpic.setName(epic.getName());
         updateEpic.setDescription(epic.getDescription());
-        updatePrioritizedTasks();
     }
 
     @Override
@@ -197,6 +197,7 @@ public class InMemoryTaskManager implements TaskManager {
                     subtaskForEpic.set(i, subtask);
                     epic.addSubTask(subtask);
                     epic.updateStatus();
+                    epic.updateTime();
                     break;
                 }
             }
@@ -239,9 +240,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
             epicsSubtaks.clear();
             epic.updateStatus();
-            epic.setStartTime(null);
-            epic.setDuration(Duration.ofMinutes(0));
-            epic.setEndTime(null);
+            epic.updateTime();
             updatePrioritizedTasks();
         }
     }
@@ -262,24 +261,8 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         epic.updateStatus();
+        epic.updateTime();
         updatePrioritizedTasks();
-        // Наколхозил тут конечно) Но что-то не придумал как можно лучше реализовать)
-        Set<Task> subtaskTimeList = prioritizedTasks.stream().filter(subtask1 -> subtask1.getTaskType().equals(TaskType.SUBTASK)).collect(Collectors.toSet());
-        if (subtaskTimeList.isEmpty()) {
-            epic.setStartTime(null);
-            epic.setEndTime(null);
-            epic.setDuration(Duration.ofMinutes(0));
-        } else {
-            Set<Task> prioritizedSubasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
-            prioritizedSubasks.addAll(subtaskTimeList);
-            epic.setStartTime(prioritizedSubasks.stream().findFirst().get().getStartTime());
-            Duration duration = Duration.ofMinutes(0);
-            for (Task taskss : prioritizedSubasks) {
-                duration = duration.plus(taskss.getDuration());
-                epic.setDuration(duration);
-            }
-            epic.setEndTime(epic.getEndTime());
-        }
     }
 
     @Override

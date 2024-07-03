@@ -4,6 +4,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 
 public class Epic extends Task {
@@ -55,12 +59,26 @@ public class Epic extends Task {
         }
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+    public void updateTime() {
+        if (subtasks.isEmpty()) {
+            setStartTime(null);
+            setEndTime(null);
+            setDuration(null);
+        } else {
+            Set<Task> prioritizedSubasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+            prioritizedSubasks.addAll(subtasks);
+            setStartTime(prioritizedSubasks.stream().findFirst().get().getStartTime());
+            Duration duration = Duration.ofMinutes(0);
+            for (Task tasks : prioritizedSubasks) {
+                duration = duration.plus(tasks.getDuration());
+                setDuration(duration);
+            }
+            setEndTime(getEndTime());
+        }
     }
 
-    public void setDuration(Duration duration) {
-        this.duration = duration;
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
     }
 
     @Override

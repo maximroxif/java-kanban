@@ -109,11 +109,12 @@ public class Main {
         fileBackedTaskManager.addSubtask(subtask7);
         fileBackedTaskManager.deleteSubtasksByid(7);
 //        fileBackedTaskManager.deleteSubtasksByid(6);
-//        fileBackedTaskManager.deleteSubtasksByid(5);
-        fileBackedTaskManager.deleteAllSubtasks();
+        fileBackedTaskManager.deleteSubtasksByid(5);
+//        fileBackedTaskManager.deleteAllSubtasks();
         fileBackedTaskManager = fileBackedTaskManager.loadFromFile(dir);
 //        fileBackedTaskManager.addTask(new Task("sss", "ddd"));
         System.out.println(fileBackedTaskManager.getPrioritizedTasks());
+        System.out.println(epic2333.getEndTime());
 //        System.out.println(fileBackedTaskManager.getEpicSubtask(epic2333));
 
     }
