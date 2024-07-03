@@ -3,16 +3,13 @@ package manager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import model.TaskType;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
