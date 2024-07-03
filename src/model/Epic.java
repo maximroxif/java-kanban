@@ -71,8 +71,10 @@ public class Epic extends Task {
             for (Task tasks : prioritizedSubasks) {
                 duration = duration.plus(tasks.getDuration());
                 setDuration(duration);
+                if (endTime.isBefore(tasks.getEndTime())) {
+                    endTime = tasks.getEndTime();
+                }
             }
-            setEndTime(getEndTime());
         }
     }
 
