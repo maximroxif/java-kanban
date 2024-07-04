@@ -1,16 +1,27 @@
 package model;
 
-public class Subtask extends Task {
-    private static int epicid;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-    public Subtask(int id, String name, String description, TaskStatus taskStatus, int epicid) {
-        super(id, name, description, taskStatus);
+
+public class Subtask extends Task {
+    private int epicid;
+
+    public Subtask(String name, String description) {
+        super(name, description);
+    }
+
+    public Subtask(String name, String description, LocalDateTime startTime, Duration duration, int epicid) {
+        super(name, description, startTime, duration);
         this.epicid = epicid;
     }
 
-    public Subtask(String name, String description, TaskStatus taskStatus, int epicid) {
-        super(name, description, taskStatus);
-        this.epicid = epicid;
+    public Subtask(Subtask subtask) {
+        super(subtask.name, subtask.description, subtask.startTime, subtask.duration);
+        this.epicid = subtask.epicid;
+        this.id = subtask.id;
+        this.taskStatus = subtask.taskStatus;
     }
 
     public int getEpicid() {
@@ -26,17 +37,20 @@ public class Subtask extends Task {
         return TaskType.SUBTASK;
     }
 
-    public static int getEpicID() {
+    public int getEpicId() {
         return epicid;
     }
+
 
     @Override
     public String toString() {
         return "Subtask{" +
-                "id=" + getid() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", taskStatus=" + getTaskStatus() +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", taskStatus=" + taskStatus +
+                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("yy.MM.dd HH:mm")) +
+                ", duration=" + duration.toMinutes() +
                 '}';
     }
 }
