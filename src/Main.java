@@ -1,4 +1,5 @@
 import manager.FileBackedTaskManager;
+import manager.TaskNotFoundException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TaskNotFoundException {
 //        TaskManager taskManager = CreateManagers.getDefaultTask();
 //
 //

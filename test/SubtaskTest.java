@@ -1,5 +1,6 @@
 import manager.CreateManagers;
 import manager.TaskManager;
+import manager.TaskNotFoundException;
 import model.Epic;
 import model.Subtask;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ class SubtaskTest {
     private TaskManager taskManager;
 
     @Test
-    void shouldAddNewSubtask() {
+    void shouldAddNewSubtask() throws TaskNotFoundException {
         taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewSubtask", "Test addNewSubtask description");
         taskManager.addEpic(epic);

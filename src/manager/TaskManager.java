@@ -11,27 +11,27 @@ public interface TaskManager {
 
     Epic addEpic(Epic epic);
 
-    Subtask addSubtask(Subtask subtask);
+    Subtask addSubtask(Subtask subtask) throws TaskNotFoundException;
 
     void updateTask(Task task);
 
     List<Task> getAllTasks();
 
-    Task getTaskByid(int id);
+    Task getTaskByid(int id) throws TaskNotFoundException;
 
     void deleteAllTasks();
 
-    void deleteTaskByid(int id);
+    void deleteTaskByid(int id) throws TaskNotFoundException;
 
     void updateEpic(Epic epic);
 
     List<Epic> getAllEpics();
 
-    Epic getEpicByid(int id);
+    Epic getEpicByid(int id) throws TaskNotFoundException;
 
     void deleteAllEpics();
 
-    void deleteEpicByid(int id);
+    void deleteEpicByid(int id) throws TaskNotFoundException;
 
     void updateSubtask(Subtask subtask);
 
@@ -39,11 +39,11 @@ public interface TaskManager {
 
     List<Subtask> getEpicSubtask(Epic epic);
 
-    Subtask getSubTaskByid(int id);
+    Subtask getSubTaskByid(int id) throws TaskNotFoundException;
 
     void deleteAllSubtasks();
 
-    void deleteSubtasksByid(int id);
+    void deleteSubtasksByid(int id) throws TaskNotFoundException;
 
     List<Task> getHistory();
 
