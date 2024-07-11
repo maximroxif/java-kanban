@@ -1,19 +1,19 @@
-package httpServer;
+package server;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import manager.IntersectsExistingTaskException;
 import manager.TaskManager;
 import manager.TaskNotFoundException;
-import model.Task;
+import model.Epic;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
-public class TaskHandler extends BaseHttpHandler {
-    public TaskHandler(TaskManager taskManager, Gson gson) {
+public class EpicHandler extends BaseHttpHandler {
+    public EpicHandler(TaskManager taskManager, Gson gson) {
         super(taskManager, gson);
     }
 
@@ -56,24 +56,39 @@ public class TaskHandler extends BaseHttpHandler {
 
     public void handleGet(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
-        if (Pattern.matches("^/tasks$", path)) {
+        if (Pattern.matches("^/epics$", path)) {
             try {
-                String response = gson.toJson(taskManager.getAllTasks());
+                String response = gson.toJson(taskManager.getAllEpics());
                 sendText(exchange, response);
             } catch (Exception e) {
                 sendInternalServerError(exchange);
             }
         }
-        if (Pattern.matches("^/tasks/\\d+$", path)) {
+        if (Pattern.matches("^/epics/\\d+$", path)) {
             try {
-                String pathId = path.replaceFirst("/tasks/", "");
+                String pathId = path.replaceFirst("/epics/", "");
                 int id = parsePathID(pathId);
                 if (id != -1) {
-                    String response = gson.toJson(taskManager.getTaskByid(id));
+                    String response = gson.toJson(taskManager.getEpicByid(id));
                     sendText(exchange, response);
                 }
             } catch (TaskNotFoundException e) {
-                sendNotFound(exchange, "Задача не найдена");
+                sendNotFound(exchange, "Эпик не найден");
+            } catch (Exception e) {
+                sendInternalServerError(exchange);
+            }
+        }
+        if (Pattern.matches("^/subtasks$", path)) {
+            try {
+                String pathId = path.replaceFirst("/epics/", "").replaceFirst("/subtasks$", "");
+                int id = parsePathID(pathId);
+                if (id != -1) {
+                    Epic epic = taskManager.getEpicByid(id);
+                    String response = gson.toJson(taskManager.getEpicSubtask(epic));
+                    sendText(exchange, response);
+                }
+            } catch (TaskNotFoundException e) {
+                sendNotFound(exchange, "Эпик не найден");
             } catch (Exception e) {
                 sendInternalServerError(exchange);
             }
@@ -83,29 +98,29 @@ public class TaskHandler extends BaseHttpHandler {
     private void handlePost(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
 
-        if (Pattern.matches("^/tasks$", path)) {
+        if (Pattern.matches("^/epics$", path)) {
             try {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-                Task task1 = gson.fromJson(body, Task.class);
-                taskManager.addTask(task1);
-                sendAdd(exchange, "Задача создана");
+                Epic epic = gson.fromJson(body, Epic.class);
+                taskManager.addEpic(epic);
+                sendAdd(exchange, "Эпик создан");
             } catch (IntersectsExistingTaskException exception) {
                 sendHasInteractions(exchange, "Данное время занято");
             } catch (Exception e) {
                 sendInternalServerError(exchange);
             }
         }
-        if (Pattern.matches("^/tasks/\\d+$", path)) {
+        if (Pattern.matches("^/epics/\\d+$", path)) {
             try {
-                String pathId = path.replaceFirst("/tasks/", "");
+                String pathId = path.replaceFirst("/epics/", "");
                 int id = parsePathID(pathId);
                 if (id != -1) {
                     InputStream inputStream = exchange.getRequestBody();
                     String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-                    Task task = gson.fromJson(body, Task.class);
-                    taskManager.updateTask(task);
-                    sendAdd(exchange, "Задача обновлена");
+                    Epic epic = gson.fromJson(body, Epic.class);
+                    taskManager.updateEpic(epic);
+                    sendAdd(exchange, "Эпик обновлен");
                 }
             } catch (IntersectsExistingTaskException e) {
                 sendHasInteractions(exchange, "Данное время занято");
@@ -118,16 +133,17 @@ public class TaskHandler extends BaseHttpHandler {
     private void handleDelete(HttpExchange exchange) throws IOException {
         String path = exchange.getRequestURI().getPath();
 
-        if (Pattern.matches("^/tasks/\\d+$", path)) {
+        if (Pattern.matches("^/epics/\\d+$", path)) {
             try {
-                String pathId = path.replaceFirst("/tasks/", "");
+                String pathId = path.replaceFirst("/epics/", "");
                 int id = parsePathID(pathId);
                 if (id != -1) {
-                    taskManager.deleteTaskByid(id);
-                    sendText(exchange, "Задача удалена");
+                    taskManager.deleteEpicByid(id);
+                    System.out.println("Удален эпик под индексом " + id);
+                    exchange.sendResponseHeaders(200, 0);
                 }
             } catch (TaskNotFoundException exception) {
-                sendNotFound(exchange, "Задача не найдена");
+                sendNotFound(exchange, "Эпик не найден");
             } catch (Exception exception) {
                 sendInternalServerError(exchange);
             }
