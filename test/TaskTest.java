@@ -1,5 +1,6 @@
 import manager.InMemoryTaskManager;
 import manager.TaskManager;
+import manager.TaskNotFoundException;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class TaskTest {
 
     @Test
-    void shouldAddNewTask() {
+    void shouldAddNewTask() throws TaskNotFoundException {
         TaskManager taskManager = new InMemoryTaskManager();
         Task task = new Task("Test addNewTask", "Test addNewTask description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
         final int taskid = taskManager.addTask(task).getid();

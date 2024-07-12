@@ -1,5 +1,6 @@
 import manager.IntersectsExistingTaskException;
 import manager.TaskManager;
+import manager.TaskNotFoundException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -10,16 +11,22 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 abstract class TaskManagerTest<T extends TaskManager> {
 
     protected T taskManager;
 
     @Test
-    public void shouldTheTaskUpdateMethod() {
+    public void shouldTheTaskUpdateMethod() throws TaskNotFoundException {
         Task task = new Task("Model.Task", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
         Task task2 = new Task("Model.Task", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 22), Duration.ofMinutes(10));
         taskManager.addTask(task);
@@ -31,7 +38,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldTheSubtaskUpdateMethod() {
+    public void shouldTheSubtaskUpdateMethod() throws TaskNotFoundException {
         Epic epic = new Epic("Model.Epic", "Description");
         taskManager.addEpic(epic);
 
@@ -93,7 +100,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldGetAllSubtasks() {
+    public void shouldGetAllSubtasks() throws TaskNotFoundException {
         Epic epic = new Epic("Model.Epic", "Description");
         taskManager.addEpic(epic);
 
@@ -110,7 +117,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldGetEpicSubtask() {
+    public void shouldGetEpicSubtask() throws TaskNotFoundException {
         Epic epic = new Epic("Model.Epic", "Description");
         taskManager.addEpic(epic);
         Subtask subtask = new Subtask("Model.Subtask", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10), epic.getid());
@@ -137,7 +144,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldDeleteTaskByid() {
+    public void shouldDeleteTaskByid() throws TaskNotFoundException {
         Task task1 = new Task("Task1", "Description1", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
         Task task2 = new Task("Task2", "Description2", LocalDateTime.of(2024, Month.JUNE, 30, 12, 21), Duration.ofMinutes(10));
         taskManager.addTask(task1);
@@ -145,11 +152,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(taskManager.getTaskByid(task1.getid()));
         taskManager.deleteTaskByid(task1.getid());
-        assertNull(taskManager.getTaskByid(task1.getid()));
+        Assertions.assertThrows(TaskNotFoundException.class, () -> {
+            taskManager.getTaskByid(task1.getid());
+        });
     }
 
     @Test
-    public void shouldDeleteEpicByid() {
+    public void shouldDeleteEpicByid() throws TaskNotFoundException {
         Epic epic1 = new Epic("Epic1", "Description1");
         taskManager.addEpic(epic1);
 
@@ -162,14 +171,15 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(taskManager.getSubTaskByid(subtask2.getid()));
 
         taskManager.deleteEpicByid(epic1.getid());
-
-        assertNull(taskManager.getEpicByid(epic1.getid()));
-        assertNull(taskManager.getSubTaskByid(subtask1.getid()));
-        assertNull(taskManager.getSubTaskByid(subtask2.getid()));
+        Assertions.assertThrows(TaskNotFoundException.class, () -> {
+            taskManager.getEpicByid(epic1.getid());
+            taskManager.getSubTaskByid(subtask1.getid());
+            taskManager.getSubTaskByid(subtask2.getid());
+        });
     }
 
     @Test
-    public void shouldDeleteAllEpics() {
+    public void shouldDeleteAllEpics() throws TaskNotFoundException {
         Epic epic1 = new Epic("Epic1", "Description1");
         Epic epic2 = new Epic("Epic2", "Description2");
 
@@ -177,12 +187,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.addEpic(epic2);
 
         taskManager.deleteAllEpics();
-        assertNull(taskManager.getEpicByid(epic1.getid()));
-        assertNull(taskManager.getEpicByid(epic2.getid()));
+        Assertions.assertThrows(TaskNotFoundException.class, () -> {
+            taskManager.getEpicByid(epic1.getid());
+        });
     }
 
     @Test
-    public void shouldDeleteSubtaskByid() {
+    public void shouldDeleteSubtaskByid() throws TaskNotFoundException {
         Epic epic1 = new Epic("Epic1", "Description1");
         taskManager.addEpic(epic1);
 
@@ -191,11 +202,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         taskManager.deleteSubtasksByid(subtask.getid());
 
-        assertNull(taskManager.getSubTaskByid(subtask.getid()));
+        Assertions.assertThrows(TaskNotFoundException.class, () -> {
+            taskManager.getSubTaskByid(subtask.getid());
+        });
     }
 
     @Test
-    public void shouldDeleteAllSubtasks() {
+    public void shouldDeleteAllSubtasks() throws TaskNotFoundException {
         Epic epic1 = new Epic("Epic1", "Description1");
         taskManager.addEpic(epic1);
 

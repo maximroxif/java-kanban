@@ -1,5 +1,6 @@
 import manager.CreateManagers;
 import manager.TaskManager;
+import manager.TaskNotFoundException;
 import model.Task;
 import model.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void checkingThatTheAddedTasksRetainThePreviousVersionOfTheTask() {
+    public void checkingThatTheAddedTasksRetainThePreviousVersionOfTheTask() throws TaskNotFoundException {
         Task task = new Task("Model.Task222", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 00), Duration.ofMinutes(0));
         taskManager.addTask(task);
         taskManager.getTaskByid(task.getid());
@@ -38,7 +39,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void checkingTheImmutabilityOfTheTaskInAllFieldsAndTheManagerDoesNotExceed10() {
+    public void checkingTheImmutabilityOfTheTaskInAllFieldsAndTheManagerDoesNotExceed10() throws TaskNotFoundException {
         Task task = new Task("Model.Task", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
         Task task2 = new Task("Model.Task 2", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 21), Duration.ofMinutes(10));
         Task task3 = new Task("Model.Task 3", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 32), Duration.ofMinutes(10));
@@ -72,7 +73,7 @@ class InMemoryHistoryManagerTest {
         savedTasks.add(task9);
         savedTasks.add(task10);
 
-        for (int i = 1; i <= savedTasks.size() + 1; i++) {
+        for (int i = 1; i < savedTasks.size() + 1; i++) {
             taskManager.getTaskByid(i);
         }
         assertEquals(taskManager.getHistory(), savedTasks);

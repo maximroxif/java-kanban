@@ -22,7 +22,7 @@ public class Epic extends Task {
     }
 
     public void addSubTask(Subtask subtask) {
-        this.subtasks.add(subtask);
+        subtasks.add(subtask);
     }
 
     @Override

@@ -1,4 +1,5 @@
 import manager.FileBackedTaskManager;
+import manager.TaskNotFoundException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -38,7 +39,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     }
 
     @Test
-    public void shouldSaveMultipleTasks() {
+    public void shouldSaveMultipleTasks() throws TaskNotFoundException {
         Task task = new Task("Task", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
         taskManager.addTask(task);
         Epic epic = new Epic("Epic", "Description");
@@ -63,7 +64,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     }
 
     @Test
-    public void shouldDeleteTasksInFile() throws IOException {
+    public void shouldDeleteTasksInFile() throws IOException, TaskNotFoundException {
         Task task = new Task("Task", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 10), Duration.ofMinutes(10));
         taskManager.addTask(task);
         Task task2 = new Task("Task2", "Description", LocalDateTime.of(2024, Month.JUNE, 30, 12, 21), Duration.ofMinutes(10));

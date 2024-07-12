@@ -1,5 +1,6 @@
 import manager.CreateManagers;
 import manager.TaskManager;
+import manager.TaskNotFoundException;
 import model.Epic;
 import model.Subtask;
 import model.TaskStatus;
@@ -16,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class EpicTest {
 
     @Test
-    public void shouldAddNewEpic() {
+    public void shouldAddNewEpic() throws TaskNotFoundException {
         TaskManager taskManager = CreateManagers.getDefaultTask();
         Epic epic = new Epic("Test addNewEpic", "Test addNewEpicDescription");
         final int epicid = taskManager.addEpic(epic).getid();
