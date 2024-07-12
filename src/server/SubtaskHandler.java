@@ -88,8 +88,8 @@ public class SubtaskHandler extends BaseHttpHandler {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 Subtask subtask = gson.fromJson(body, Subtask.class);
-                taskManager.addSubtask(subtask);
-                sendAdd(exchange, "Подзадача создана");
+                Subtask subtask1 = taskManager.addSubtask(subtask);
+                sendAdd(exchange, "Подзадача создана. ID - " + subtask1.getid());
             } catch (IntersectsExistingTaskException exception) {
                 sendHasInteractions(exchange, "Данное время занято");
             } catch (TaskNotFoundException e) {

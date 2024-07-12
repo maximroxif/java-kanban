@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 
 public class Epic extends Task {
-    private ArrayList<Subtask> subtasks = new ArrayList<>();
+    private final ArrayList<Subtask> subtasks = new ArrayList<>();
     protected LocalDateTime endTime = null;
 
     public Epic(String name, String description) {

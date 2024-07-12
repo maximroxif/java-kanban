@@ -103,8 +103,8 @@ public class EpicHandler extends BaseHttpHandler {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 Epic epic = gson.fromJson(body, Epic.class);
-                taskManager.addEpic(epic);
-                sendAdd(exchange, "Эпик создан");
+                Epic epic1 = taskManager.addEpic(epic);
+                sendAdd(exchange, "Эпик создан. ID - " + epic1.getid());
             } catch (IntersectsExistingTaskException exception) {
                 sendHasInteractions(exchange, "Данное время занято");
             } catch (Exception e) {

@@ -88,8 +88,8 @@ public class TaskHandler extends BaseHttpHandler {
                 InputStream inputStream = exchange.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 Task task1 = gson.fromJson(body, Task.class);
-                taskManager.addTask(task1);
-                sendAdd(exchange, "Задача создана");
+                Task task = taskManager.addTask(task1);
+                sendAdd(exchange, "Задача создана. ID - " + task.getid());
             } catch (IntersectsExistingTaskException exception) {
                 sendHasInteractions(exchange, "Данное время занято");
             } catch (Exception e) {
